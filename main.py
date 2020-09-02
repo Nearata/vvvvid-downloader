@@ -2,6 +2,7 @@ from configparser import ConfigParser
 from sys import exit as exit_script
 from pathlib import Path
 from subprocess import run as sp_run
+from re import sub
 from click import command, option
 from requests import Session
 from colorama import init, Fore, Style
@@ -90,9 +91,10 @@ def main(show_id):
         # Ask the user in which quality to download
         quality_questions = [inquirer_list("choice", message=f"{Fore.GREEN + Style.BRIGHT}Seleziona la qualità{Fore.YELLOW}", choices=available_qualities_questions)]
         quality_answers = inquirer_prompt(quality_questions)
+        quality_choice = quality_answers.get("choice")
 
         # Get the embed_info code based on the answer of the user
-        embed_info = available_qualities[quality_answers.get("choice").lower()]
+        embed_info = available_qualities[quality_choice.lower()]
         for i in season_choice_json["data"]:
             url = ds(i[embed_info])
 
@@ -103,7 +105,7 @@ def main(show_id):
 
             show_title = i["show_title"]
             episode_number = i["number"]
-            output = f"{show_title} - Episodio {episode_number}.mp4"
+            output = sub(r"\s", "_", f"{show_title}_Ep_{episode_number}_{quality_choice}.mp4")
 
             print(f"{Fore.GREEN + Style.BRIGHT}{Fore.WHITE}Sto scaricando l'episodio numero: {Fore.YELLOW}{episode_number}")
 

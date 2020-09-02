@@ -4,7 +4,7 @@
 
 ## Requisiti
 
-- Python 3.8.5+
+- Python 3.8+
 - Pipenv
 - FFmpeg
 

@@ -20,7 +20,7 @@ def main(show_id):
     save_location = Path().joinpath(config_default["save-location"]).absolute()
     ffmpeg_location = config_default["ffmpeg-location"]
 
-    print(f"{Fore.GREEN + Style.BRIGHT}INFO: {Fore.WHITE}Gli anime verranno salvati in: {Fore.YELLOW}{save_location}{Fore.WHITE}.")
+    print(f"{Fore.GREEN + Style.BRIGHT}INFO: {Fore.WHITE}Gli show verranno salvati in: {Fore.YELLOW}{save_location}{Fore.WHITE}.")
 
     save_location_questions = [inquirer_list("choice", f"{Fore.LIGHTGREEN_EX}Vuoi cambiare la cartella di destinazione?{Fore.LIGHTYELLOW_EX}", choices=["Si", "No"], default="No")]
     answers = inquirer_prompt(save_location_questions)

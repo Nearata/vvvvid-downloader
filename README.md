@@ -15,7 +15,13 @@
 3. Clona questa repo oppure scarica il file ZIP.
 4. Apri un terminale nella cartella ed esegui `pipenv install`.
 5. Apri il file `config.ini` e modifica i campi seguendo le istruzioni scritte nella sezione `Configurazione` sotto.
-6. Finito. Per scaricare un anime, apri sempre il terminale nella cartella e scrivi `pipenv run python main.py` e segui le istruzioni a schermo.
+6. Per scaricare un anime, apri il terminale nella cartella e scrivi `pipenv run python main.py` e segui le istruzioni a schermo. Per trovare l'ID, leggi la sezione `Come trovare l'ID di uno show` sotto.
+
+## Come trovare l'ID di uno show
+
+Apri VVVVID e clicca sullo show che vuoi scaricare:
+
+Esempio: `https://www.vvvvid.it/show/1353/deca-dence` - 1353 è l'id dello show.
 
 ## Configurazione
 

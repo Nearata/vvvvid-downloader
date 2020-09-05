@@ -4,32 +4,45 @@
 
 ## Requisiti
 
-- Python 3.8+
-- Pipenv
-- FFmpeg
+- [Python](https://python.org) 3.8+
+- [FFmpeg](https://ffmpeg.org/)
 
 ## Installazione
 
-1. Scarica [Python](https://www.python.org/) per il tuo sistema operativo e installalo.
-2. Installa `Pipenv`. Es. `pip install pipenv`.
-3. Clona questa repo oppure scarica il file ZIP.
-4. Apri un terminale nella cartella ed esegui `pipenv install`.
-5. Apri il file `config.ini` e modifica i campi seguendo le istruzioni scritte nella sezione `Configurazione` sotto.
-6. Per scaricare un anime, apri il terminale nella cartella e scrivi `pipenv run python main.py` e segui le istruzioni a schermo. Per trovare l'ID, leggi la sezione `Come trovare l'ID di uno show` sotto.
+```sh
+pip install vvvvid-downloader
+```
+
+## Utilizzo
+
+```sh
+python -m vvvvid_downloader
+```
+
+Segui le istruzioni a schermo. Per maggiori informazioni sui campi di configurazione, leggi la sezione `Configurazione` sotto.
 
 ## Come trovare l'ID di uno show
 
-Apri VVVVID e clicca sullo show che vuoi scaricare:
+Apri uno show che vuoi scaricare da [VVVVID](https://www.vvvvid.it). Esempio:
 
-Esempio: `https://www.vvvvid.it/show/1353/deca-dence` - 1353 è l'id dello show.
+```sh
+https://www.vvvvid.it/show/1353/deca-dence
+```
+
+In questo caso, l'ID dello show è `1353`
 
 ## Configurazione
 
-Nel file di configurazione (`config.ini`) puoi modificare diversi campi:
+Al primo avvio dello script, vi verrà chiesto di completare i campi `save-location` e `ffmpeg-location`.
 
-- `user-agent`: L'user agent usato dallo script durante nelle richieste HTTP.
-- `save-location`: La cartella dove lo script salverà i file (defualt `vvvvid`).
-- `ffmpeg-location`: Deve puntare direttamente al file di ffmpeg, esempio: `/path/to/ffmpeg/bin/ffmpeg` (default `null`, quindi si aspetta ffmpeg disponibile globalmente nel sistema)
+Ad ogni avvio, invece, vi verrà chiesto se volete o meno modificare il valore di ogni singolo campo.
+
+- `user-agent`: Questo sarà l'User Agent che lo script userà per le richieste HTTP.
+  - Esempio: `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0`.
+- `save-location`: Questo è il percorso alla cartella dove verranno salvati i file che lo script scaricherà.
+  - Esempio: `C:\Utenti\Desktop\vvvvid`.
+- `ffmpeg-location`: Questo è il percorso che deve portare al file `ffmpeg`.
+  - Se avete impostato una variabile d'ambiente, potete semplicemente inserire `ffmpeg`.
 
 ## License
 

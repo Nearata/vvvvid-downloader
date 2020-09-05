@@ -5,12 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+setuptools = "*"
+wheel = "*"
+twine = "*"
 
 [packages]
 requests = "*"
 inquirer = "*"
 colorama = "*"
-click = "*"
 
 [requires]
 python_version = "3.8"

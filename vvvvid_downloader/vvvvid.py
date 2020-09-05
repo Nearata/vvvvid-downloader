@@ -1,5 +1,6 @@
 def ds(h):
     """ The formula used by VVVVID to get real url from embed_code codes """
+
     g = "MNOPIJKL89+/4567UVWXQRSTEFGHABCDcdefYZabstuvopqr0123wxyzklmnghij"
 
     def f(m):

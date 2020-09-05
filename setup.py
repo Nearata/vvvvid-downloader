@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="vvvvid-downloader",
-    version="1.0.3",
+    version="1.0.0",
     author="Nearata",
     author_email="williamdicicco@protonmail.com",
     description="Uno script in Python che permette di scaricare facilmente i video da VVVVID.",

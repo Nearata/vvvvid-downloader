@@ -40,7 +40,7 @@ Ad ogni avvio, invece, vi verrà chiesto se volete o meno modificare il valore d
 - `user-agent`: Questo sarà l'User Agent che lo script userà per le richieste HTTP.
   - Esempio: `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0`.
 - `save-location`: Questo è il percorso alla cartella dove verranno salvati i file che lo script scaricherà.
-  - Esempio: `C:\Utenti\Desktop\vvvvid`.
+  - Esempio: `C:\Utenti\<nome_utente>\Desktop\vvvvid`.
 - `ffmpeg-location`: Questo è il percorso che deve portare al file `ffmpeg`.
   - Se avete impostato una variabile d'ambiente, potete semplicemente inserire `ffmpeg`.
 

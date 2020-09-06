@@ -42,7 +42,7 @@ Ad ogni avvio, invece, vi verrà chiesto se volete o meno modificare il valore d
 - `save-location`: Questo è il percorso alla cartella dove verranno salvati i file che lo script scaricherà.
   - Esempio: `C:\Utenti\<nome_utente>\Desktop\vvvvid`.
 - `ffmpeg-location`: Questo è il percorso che deve portare al file `ffmpeg`.
-  - Se avete impostato una variabile d'ambiente, potete semplicemente inserire `ffmpeg`.
+  - Se avete impostato una variabile d'ambiente, potete anche inserire il nome della variabile.
 
 ## License
 

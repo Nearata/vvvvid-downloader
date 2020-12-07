@@ -40,6 +40,11 @@ class Main():
         while not show_id:
             try:
                 show_id = int(input(f"{Fore.LIGHTYELLOW_EX}Show ID: {Fore.LIGHTWHITE_EX}"))
+
+                if (show_id < 0):
+                    print(f"{Fore.LIGHTRED_EX}[ERRORE] {Fore.LIGHTYELLOW_EX}Non può essere negativo.")
+                    show_id = None
+
             except ValueError:
                 print(f"{Fore.LIGHTRED_EX}[ERRORE] {Fore.LIGHTYELLOW_EX}ID non valido.")
 
@@ -83,13 +88,14 @@ class Main():
             # Get the episodes of the selected version
             season_choice_response = s.get(f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/season/{season_id}?video_id={video_id}&conn_id={conn_id}", headers=headers)
             season_choice_json = season_choice_response.json()
+            episodes = season_choice_json["data"]
 
             available_qualities = {}
             available_qualities_questions = []
             if video_format == "SD":
                 available_qualities_questions.append("SD")
 
-                if "embed_info" in season_choice_json["data"][0]:
+                if "embed_info" in episodes[0]:
                     available_qualities.update({"sd": "embed_info"})
                 else:
                     available_qualities.update({"sd": "embed_info_sd"})
@@ -103,7 +109,39 @@ class Main():
 
             # Get the embed_info code based on the answer of the user
             embed_info = available_qualities[quality_choice.lower()]
-            for i in season_choice_json["data"]:
+
+            if len(episodes) > 1:
+                choice = inquirer_list(f"{Fore.LIGHTYELLOW_EX}Sono disponibili {len(episodes)} episodi. Vuoi che li scarico tutti?{Fore.LIGHTWHITE_EX}", default="Si", choices=["Si", "No"])
+
+                if choice == "No":
+                    print(f"{Fore.LIGHTCYAN_EX}[ATTENZIONE] {Fore.RESET} Inserisci gli episodi che vuoi scaricare separati da una virgola (,). Esempio: 1,4,5")
+                    answer = None
+
+                    while not answer:
+                        answer = input(f"{Fore.LIGHTYELLOW_EX}Episodi: {Fore.LIGHTWHITE_EX}")
+
+                        if len(answer) == 0:
+                            print("Devi inserire almeno 1 episodio.")
+                            continue
+
+                        answer = answer.split(",")
+                        for i in answer:
+                            try:
+                                int(i)
+                            except ValueError:
+                                print(f"{Fore.LIGHTRED_EX}[ERRORE] {Fore.LIGHTYELLOW_EX}Devono essere solo numeri.")
+                                answer = None
+                                break
+
+                        answer = [int(i) for i in answer]
+
+                    episodes = [i for index, i in enumerate(episodes, 1) if index in answer]
+
+            for i in episodes:
+                if not i["playable"]:
+                    print(f"{Fore.LIGHTRED_EX}[ERRORE] {Fore.LIGHTYELLOW_EX}L'episodio {i['number']} non può essere scaricato.")
+                    continue
+
                 url = ds(i[embed_info])
 
                 if i["video_type"] == "video/rcs":
@@ -115,7 +153,7 @@ class Main():
                 episode_number = i["number"]
                 output = sub(r"\s", "_", f"{show_title}_Ep_{episode_number}_{quality_choice}.mp4")
 
-                print(f"{Fore.LIGHTGREEN_EX}[INFO:] {Fore.LIGHTYELLOW_EX}Sto scaricando l'episodio numero: {Fore.LIGHTWHITE_EX}{episode_number}")
+                print(f"{Fore.LIGHTGREEN_EX}[INFO] {Fore.LIGHTYELLOW_EX}Sto scaricando l'episodio numero: {Fore.LIGHTWHITE_EX}{episode_number}")
 
                 # Download episode with FFmpeg, covert the file from .ts to .mp4 and save it
                 sp_run([

@@ -32,10 +32,12 @@ class Main():
     def __init__(self) -> None:
         colorama_init()
 
-    def __call__(self):
+    def __call__(self) -> None:
         user_agent, save_location, ffmpeg_location = self.__config()
         headers = {"User-Agent": user_agent}
         show_id = None
+
+        Path(save_location).mkdir(exist_ok=True)
 
         while not show_id:
             try:
@@ -199,7 +201,7 @@ class Main():
 
         return tuple(config_default[key] for key in list(config_default.keys()))
 
-    def __config_create(self, path: Path):
+    def __config_create(self, path: Path) -> None:
         config = ConfigParser()
 
         config["default"] = {

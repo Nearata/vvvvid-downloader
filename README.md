@@ -46,7 +46,7 @@ Ad ogni avvio, invece, vi verrà chiesto se volete o meno modificare il valore d
 
 ## License
 
-Distributed under the MIT license. See `LICENSE` for more information.
+Distributed under the MIT license. See [LICENSE](LICENSE) for more information.
 
 ## Contributing
 

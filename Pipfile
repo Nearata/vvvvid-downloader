@@ -8,6 +8,7 @@ pylint = "*"
 setuptools = "*"
 wheel = "*"
 twine = "*"
+build = "*"
 
 [packages]
 requests = "*"
@@ -15,4 +16,4 @@ inquirer = "*"
 colorama = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"

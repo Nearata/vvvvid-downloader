@@ -77,20 +77,35 @@ class Main():
             seasons_questions = [i["name"] for i in seasons_json["data"]]
             seasons_choice = inquirer_list(f"{Fore.LIGHTYELLOW_EX}Seleziona la versione che vuoi scaricare{Fore.LIGHTWHITE_EX}", choices=seasons_questions)
 
-            # Get season_id and video_id from the first episode
-            season_choice_data = [
-                {
-                    "season_id": i["episodes"][0]["season_id"],
-                    "video_id": i["episodes"][0]["video_id"]
-                } for i in seasons_json["data"] if i["name"] == seasons_choice
-            ][0]
-            season_id = season_choice_data["season_id"]
-            video_id = season_choice_data["video_id"]
+            # Get selected season data
+            season_choice_data = {}
+            for i in seasons_json["data"]:
+                if i["name"] == seasons_choice:
+                    season_choice_data.update(i)
 
-            # Get the episodes of the selected version
-            season_choice_response = s.get(f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/season/{season_id}?video_id={video_id}&conn_id={conn_id}", headers=headers)
-            season_choice_json = season_choice_response.json()
-            episodes = season_choice_json["data"]
+            episodes = season_choice_data["episodes"]
+
+            for idx, i in enumerate(episodes):
+                if not i["playable"]:
+                    del episodes[idx]
+
+            # get season data each time we iterate over an episode
+            for idx, i in enumerate(episodes):
+                idata = s.get(f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/season/{i['season_id']}?video_id={i['video_id']}&conn_id={conn_id}", headers=headers)
+                ijson = idata.json()
+
+                for ii in ijson["data"]:
+                    if i["video_id"] != ii["video_id"]:
+                        continue
+
+                    episodes[idx]["show_title"] = ii["show_title"]
+                    episodes[idx]["video_type"] = ii["video_type"]
+
+                    if "embed_info" in ii:
+                        episodes[idx]["embed_info"] = ii["embed_info"]
+
+                    if "embed_info_sd" in ii:
+                        episodes[idx]["embed_info_sd"] = ii["embed_info_sd"]
 
             available_qualities = {}
             available_qualities_questions = []
@@ -140,10 +155,6 @@ class Main():
                     episodes = [i for index, i in enumerate(episodes, 1) if index in answer]
 
             for i in episodes:
-                if not i["playable"]:
-                    print(f"{Fore.LIGHTRED_EX}[ERRORE] {Fore.LIGHTYELLOW_EX}L'episodio {i['number']} non può essere scaricato.")
-                    continue
-
                 url = ds(i[embed_info])
 
                 if i["video_type"] == "video/rcs":

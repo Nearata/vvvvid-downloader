@@ -43,6 +43,7 @@ Ad ogni avvio, invece, vi verrà chiesto se volete o meno modificare il valore d
   - Esempio: `C:\Utenti\<nome_utente>\Desktop\vvvvid`.
 - `ffmpeg-location`: Questo è il percorso che deve portare al file `ffmpeg`.
   - Se avete impostato una variabile d'ambiente, potete anche inserire il nome della variabile.
+  - Altrimenti, inserite il percorso che porta al file. Esempio: `D:\ffmpeg\bin\ffmpeg.exe` (se Windows).
 
 ## License
 

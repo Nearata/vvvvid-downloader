@@ -1,0 +1,22 @@
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "vvvvid_downloader"
+author = "Nearata"
+author-email = "williamdicicco@protonmail.com"
+home-page = "https://github.com/nearata/vvvvid-downloader"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9"
+]
+description-file = "README.md"
+requires = [
+    "requests ==2.25.1",
+    "inquirer ==2.7.0",
+    "colorama ==0.4.4"
+]
+requires-python = ">=3.9"

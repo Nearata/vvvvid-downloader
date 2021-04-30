@@ -224,7 +224,7 @@ class Main():
         with path.open("w") as f:
             config.write(f)
 
-    def __config_key_empty(self, keymap: str) -> str:
+    def __config_key_empty(self, keymap: dict[str, str]) -> str:
         title = keymap["title"]
         print(f"{Fore.LIGHTGREEN_EX}[INFO] {Fore.LIGHTYELLOW_EX}{title} non può essere vuoto!")
 
@@ -239,7 +239,7 @@ class Main():
 
         return answer
 
-    def __config_key_update(self, value: str, keymap: str) -> str:
+    def __config_key_update(self, value: str, keymap: dict[str, str]) -> str:
         title = keymap["title"]
         print(f"{Fore.LIGHTGREEN_EX}[INFO] {Fore.LIGHTYELLOW_EX}{title}: {Fore.LIGHTWHITE_EX}{value}")
         choice = inquirer_list(f"{Fore.LIGHTYELLOW_EX}Vuoi cambiare {title}?{Fore.LIGHTWHITE_EX}", default="No", choices=["Si", "No"])

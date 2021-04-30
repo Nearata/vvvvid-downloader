@@ -4,7 +4,7 @@
 
 ## Requisiti
 
-- [Python](https://python.org) 3.8+
+- [Python](https://python.org) 3.9+
 - [FFmpeg](https://ffmpeg.org/)
 
 ## Installazione

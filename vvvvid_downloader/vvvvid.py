@@ -1,5 +1,5 @@
 def ds(h):
-    """ The formula used by VVVVID to get real url from embed_code codes """
+    """The formula used by VVVVID to get real url from embed_code codes"""
 
     g = "MNOPIJKL89+/4567UVWXQRSTEFGHABCDcdefYZabstuvopqr0123wxyzklmnghij"
 
@@ -9,7 +9,7 @@ def ds(h):
         b = False
         m_len = len(m)
 
-        while ((not b) and o < m_len):
+        while (not b) and o < m_len:
             n = m[o] << 2
             o += 1
             k = -1
@@ -57,10 +57,8 @@ def ds(h):
         c[e % c_len] = a
 
     c = f(c)
-    d = ''
+    d = ""
     for e in c:
         d += chr(e)
 
     return d
-
-

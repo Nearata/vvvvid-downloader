@@ -6,10 +6,14 @@ verify_ssl = true
 [dev-packages]
 mypy = "*"
 flit = "*"
+black = "==21.4b2"
+isort = "*"
 
 [packages]
-requests = "*"
 inquirer = "*"
+httpx = "*"
+typer = "*"
+tqdm = "*"
 colorama = "*"
 
 [requires]

@@ -15,8 +15,13 @@ classifiers = [
 ]
 description-file = "README.md"
 requires = [
-    "requests ==2.25.1",
     "inquirer ==2.7.0",
+    "httpx ==0.18.1",
+    "typer ==0.3.2",
+    "tqdm ==4.60.0",
     "colorama ==0.4.4"
 ]
 requires-python = ">=3.9"
+
+[tool.isort]
+profile = "black"

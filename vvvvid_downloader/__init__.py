@@ -1,6 +1,3 @@
-""" Uno script in Python che permette di scaricare facilmente i video da VVVVID. """
+""" Uno script in Python per scaricare, in modo semplice, gli anime anime da VVVVID. """
 
-from vvvvid_downloader.vvvvid import ds
-
-
-__version__ = "1.1.3"
+__version__ = "1.2.0"

@@ -51,6 +51,6 @@ python -m vvvvid_downloader --edit-config
 3. Push to the branch
 4. Create a new Pull Request
 
-## License
+## Unlicense
 
-Distributed under the MIT license. See [LICENSE](LICENSE) for details.
+See [UNLICENSE](UNLICENSE) for details.

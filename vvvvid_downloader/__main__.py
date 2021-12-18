@@ -7,54 +7,48 @@ from httpx import Client
 from inquirer import list_input
 from tqdm import tqdm
 
-from .config import create_config, get_config
-from .logging import error, info
 from .vvvvid import ds
 
-APP_NAME = "vvvvid-downloader"
 
-
-def main(edit_config: bool = typer.Option(False, show_default=False)) -> None:
-    appdir = typer.get_app_dir(APP_NAME)
-    Path(appdir).mkdir(exist_ok=True)
-    configpath = Path(appdir) / "config.json"
-
-    if not configpath.exists() or edit_config:
-        create_config(configpath)
-
-    config = get_config(configpath)
+def main() -> None:
+    try:
+        sp_run(["ffmpeg", "-loglevel", "quiet"])
+    except Exception:
+        print("FFmpeg non è installato.")
+        raise typer.Exit()
 
     show_id = typer.prompt("Show ID")
 
-    headers = {"User-Agent": config.get("userAgent", "")}
-    session = Client()
+    session = Client(
+        headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0"
+        }
+    )
 
     # Get connection ID
-    response = session.get("https://www.vvvvid.it/user/login", headers=headers)
+    response = session.get("https://www.vvvvid.it/user/login")
     conn_id = response.json()["data"]["conn_id"]
 
     # Get info about the show by its ID
     response = session.get(
         f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/info/?conn_id={conn_id}",
-        headers=headers,
     )
     json = response.json()
 
     if json["result"] != "ok":
         message = json["message"]
-        error(message)
+        print(message)
         raise typer.Exit()
 
     data = json["data"]
     title = data["title"]
-    info(title)
+    print(f"Scarico info su {title}...")
 
     video_format = data["video_format"]
 
     # Get the seasons of the show (this could also contain dubbed versions)
     response = session.get(
         f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/seasons/?conn_id={conn_id}",
-        headers=headers,
     )
     json = response.json()
     data = json["data"]
@@ -81,7 +75,6 @@ def main(edit_config: bool = typer.Option(False, show_default=False)) -> None:
         video_id = i["video_id"]
         response = session.get(
             f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/season/{season_id}?video_id={video_id}&conn_id={conn_id}",
-            headers=headers,
         )
         json = response.json()
 
@@ -137,8 +130,7 @@ def main(edit_config: bool = typer.Option(False, show_default=False)) -> None:
 
             episodes = [i for index, i in enumerate(episodes, 1) if index in answer]
 
-    ffmpeg = config.get("ffmpegLocation", "")
-    savedir = config.get("saveLocation", "")
+    Path("vvvvid").mkdir(exist_ok=True)
 
     for episode in tqdm(
         episodes, "Scaricando...", bar_format="{desc} |{bar}| {n_fmt}/{total_fmt}"
@@ -165,9 +157,7 @@ def main(edit_config: bool = typer.Option(False, show_default=False)) -> None:
         # Download episode with FFmpeg, covert the file from .ts to .mp4 and save it
         sp_run(
             [
-                "ffmpeg"
-                if ffmpeg == "ffmpeg"
-                else str(Path().joinpath(ffmpeg).absolute()),
+                "ffmpeg",
                 "-loglevel",
                 "fatal",
                 "-i",
@@ -176,12 +166,12 @@ def main(edit_config: bool = typer.Option(False, show_default=False)) -> None:
                 "copy",
                 "-bsf:a",
                 "aac_adtstoasc",
-                str(Path().joinpath(savedir, output).absolute()),
+                str(Path().joinpath("vvvvid", output).absolute()),
             ]
         )
 
     session.close()
-    info("Download completato.")
+    print("Download completato.")
 
 
 if __name__ == "__main__":

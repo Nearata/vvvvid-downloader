@@ -11,10 +11,7 @@ isort = "*"
 
 [packages]
 inquirer = "*"
-httpx = {extras = ["http2"], version = "*"}
-typer = "*"
-tqdm = "*"
-colorama = "*"
+httpx = {extras = ["http2", "cli"], version = "*"}
 
 [requires]
 python_version = "3.9"

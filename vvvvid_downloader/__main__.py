@@ -1,23 +1,38 @@
+import logging
 from pathlib import Path
 from re import sub as re_sub
+from shutil import move, rmtree
 from subprocess import run as sp_run
 
-import typer
+from click import command, option
 from httpx import Client
 from inquirer import list_input
-from tqdm import tqdm
+from rich.logging import RichHandler
+from rich.progress import track
+from rich.prompt import IntPrompt, Prompt
 
 from .vvvvid import ds
 
+logging.basicConfig(
+    level="INFO",
+    format="%(message)s",
+    datefmt="[%X]",
+    handlers=[RichHandler(markup=True)],
+)
+log = logging.getLogger("vvvvid")
 
-def main() -> None:
-    try:
-        sp_run(["ffmpeg", "-loglevel", "quiet"])
-    except Exception:
-        print("FFmpeg non è installato.")
-        raise typer.Exit()
 
-    show_id = typer.prompt("Show ID")
+@command()
+@option("--download", default=False, is_flag=True)
+def main(download: bool) -> None:
+    if download:
+        try:
+            sp_run(["ffmpeg", "-loglevel", "quiet"])
+        except Exception:
+            log.critical("FFmpeg non trovato.")
+            exit()
+
+    show_id = IntPrompt.ask("ID Show")
 
     session = Client(
         headers={
@@ -38,12 +53,12 @@ def main() -> None:
 
     if json["result"] != "ok":
         message = json["message"]
-        print(message)
-        raise typer.Exit()
+        log.critical(message)
+        exit()
 
     data = json["data"]
     title = data["title"]
-    print(f"Scarico info su {title}...")
+    log.info(f"Scarico info su {title}...")
 
     video_format = data["video_format"]
 
@@ -119,26 +134,33 @@ def main() -> None:
             choices=["Si", "No"],
         )
         if choice == "No":
-            print(
-                f"[ATTENZIONE:] Inserisci gli episodi che vuoi scaricare separati da una virgola (,). Esempio: 1,4,5"
+            log.info(
+                f"Inserisci gli episodi che vuoi scaricare separati da una virgola (,). Esempio: 1,4,5"
             )
             answer = None
 
             while not answer:
-                answer = typer.prompt("Episodi")
-                answer = answer.split(",")
-                answer = [int(i) for i in answer]
+                p = Prompt.ask("Episodi", default=None)
+
+                if not p:
+                    continue
+
+                answer = [int(i) for i in p.split(",")]
 
             episodes = [i for index, i in enumerate(episodes, 1) if index in answer]
 
-    Path("vvvvid").mkdir(exist_ok=True)
+    path = None
 
-    for episode in tqdm(
-        episodes, "Scaricando...", bar_format="{desc} |{bar}| {n_fmt}/{total_fmt}"
-    ):
-        url = ds(episode[quality_code])
-        video_type = episode["video_type"]
+    for i in track(episodes, "Scarico..."):
+        show_title = i["show_title"]
+        episode_number = i["number"]
 
+        path = Path().joinpath("vvvvid", show_title, "temp")
+        path.mkdir(exist_ok=True, parents=True)
+
+        url = ds(i[quality_code])
+
+        video_type = i["video_type"]
         if video_type == "video/rcs":
             url = (
                 url.replace("http:", "https:")
@@ -151,29 +173,42 @@ def main() -> None:
                 f"https://or01.top-ix.org/videomg/_definst_/mp4:{url}/playlist.m3u8",
             )
 
-        show_title = episode["show_title"]
-        episode_number = episode["number"]
-        output = re_sub(r"\s", "_", f"{show_title}_Ep_{episode_number}_{quality}.mp4")
+        output = re_sub(r"\s", "_", f"{show_title}_Ep_{episode_number}_{quality}")
 
-        # Download episode with FFmpeg, covert the file from .ts to .mp4 and save it
+        log.info(f"Scarico episodio #{episode_number}")
+
+        response = session.get(url)
+
+        if not download:
+            playlist_path = Path().joinpath(path, f"{output}.m3u8")
+
+            if not playlist_path.exists():
+                with open(playlist_path, "wb") as dest_file:
+                    for data in response.iter_bytes(32768):
+                        dest_file.write(data)
+
+                move(playlist_path, path.parent.joinpath(playlist_path.name))
+            continue
+
         sp_run(
             [
                 "ffmpeg",
-                "-loglevel",
-                "fatal",
                 "-i",
                 url,
                 "-c",
                 "copy",
                 "-bsf:a",
                 "aac_adtstoasc",
-                str(Path().joinpath("vvvvid", output).absolute()),
-            ]
+                str(Path().joinpath(path.parent, f"{output}.mp4").absolute()),
+            ],
         )
+
+    if path and path.exists():
+        rmtree(path)
 
     session.close()
     print("Download completato.")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    main()

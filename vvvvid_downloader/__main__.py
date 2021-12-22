@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from re import sub as re_sub
-from shutil import move, rmtree
+from shutil import move, rmtree, which
 from subprocess import run as sp_run
 
 from click import command, option
@@ -29,12 +29,11 @@ log = logging.getLogger("vvvvid")
 def main(download: bool) -> None:
     log.info(f"VVVVID Downloader {__version__}")
 
-    if download:
-        try:
-            sp_run(["ffmpeg", "-loglevel", "quiet"])
-        except Exception:
-            log.critical("FFmpeg non trovato.")
-            exit()
+    ffmpeg_path = which("ffmpeg")
+
+    if download and not ffmpeg_path:
+        log.critical("FFmpeg non trovato.")
+        exit()
 
     show_id = IntPrompt.ask("ID Show")
 
@@ -196,7 +195,7 @@ def main(download: bool) -> None:
 
         sp_run(
             [
-                "ffmpeg",
+                ffmpeg_path,  # type: ignore
                 "-i",
                 url,
                 "-c",

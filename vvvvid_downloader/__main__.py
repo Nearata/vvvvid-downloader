@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from re import sub as re_sub
-from shutil import move, rmtree, which
+from shutil import rmtree, which
 from subprocess import run as sp_run
 
 from click import command, option
@@ -183,14 +183,22 @@ def main(download: bool) -> None:
         response = session.get(url)
 
         if not download:
-            playlist_path = Path().joinpath(path, f"{output}.m3u8")
+            playlist_path = Path().joinpath(path.parent, f"{output}.m3u8")
 
-            if not playlist_path.exists():
-                with open(playlist_path, "wb") as dest_file:
-                    for data in response.iter_bytes(32768):
-                        dest_file.write(data)
+            if playlist_path.exists():
+                log.warning(f"L'episodio {episode_number} è già stato scaricato.")
+                continue
 
-                move(playlist_path, path.parent.joinpath(playlist_path.name))
+            with open(playlist_path, "wb") as dest_file:
+                for data in response.iter_bytes(32768):
+                    dest_file.write(data)
+
+            continue
+
+        mp4_path = Path().joinpath(path.parent, f"{output}.mp4").absolute()
+
+        if mp4_path.exists():
+            log.warning(f"L'episodio {episode_number} è già stato scaricato.")
             continue
 
         sp_run(
@@ -202,7 +210,7 @@ def main(download: bool) -> None:
                 "copy",
                 "-bsf:a",
                 "aac_adtstoasc",
-                str(Path().joinpath(path.parent, f"{output}.mp4").absolute()),
+                str(mp4_path),
             ],
         )
 

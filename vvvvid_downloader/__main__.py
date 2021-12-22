@@ -218,7 +218,7 @@ def main(download: bool) -> None:
         rmtree(path)
 
     session.close()
-    print("Download completato.")
+    log.info("Download completato.")
 
 
 if __name__ == "__main__":

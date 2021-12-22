@@ -11,6 +11,8 @@ from rich.logging import RichHandler
 from rich.progress import track
 from rich.prompt import IntPrompt, Prompt
 
+from vvvvid_downloader import __version__
+
 from .vvvvid import ds
 
 logging.basicConfig(
@@ -25,6 +27,8 @@ log = logging.getLogger("vvvvid")
 @command()
 @option("--download", default=False, is_flag=True)
 def main(download: bool) -> None:
+    log.info(f"VVVVID Downloader {__version__}")
+
     if download:
         try:
             sp_run(["ffmpeg", "-loglevel", "quiet"])

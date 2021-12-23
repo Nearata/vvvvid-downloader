@@ -182,6 +182,13 @@ def main(download: bool) -> None:
 
         response = session.get(url)
 
+        if not response.is_success:
+            log.critical(
+                f"Impossibile scaricare [bold]{show_title} - {episode_number} (ID: {show_id})[/]."
+            )
+            log.critical(f"STATUS CODE: {response.status_code}")
+            continue
+
         if not download:
             playlist_path = Path().joinpath(path.parent, f"{output}.m3u8")
 

@@ -170,15 +170,12 @@ def main(download: bool) -> None:
                 .replace(".net/z", ".net/i")
                 .replace("manifest.f4m", "master.m3u8")
             )
-        else:
+
+        if video_type == "video/vvvvid":
             url = url.replace(
                 url,
                 f"https://or01.top-ix.org/videomg/_definst_/mp4:{url}/playlist.m3u8",
             )
-
-        output = re_sub(r"\s", "_", f"{show_title}_Ep_{episode_number}_{quality}")
-
-        log.info(f"Scarico episodio #{episode_number}")
 
         response = session.get(url)
 
@@ -187,6 +184,54 @@ def main(download: bool) -> None:
                 f"Impossibile scaricare [bold]{show_title} - {episode_number} (ID: {show_id})[/]."
             )
             log.critical(f"STATUS CODE: {response.status_code}")
+            continue
+
+        log.info(f"Scarico episodio #{episode_number}")
+
+        output = re_sub(r"\s", "_", f"{show_title}_Ep_{episode_number}_{quality}")
+
+        if video_type == "video/vvvvid":
+            flt: list[str] = list(
+                filter(lambda i: i.endswith(".m3u8"), response.text.split("\n"))
+            )
+
+            if not flt:
+                log.critical(
+                    f"Impossibile scaricare [bold]{show_title} - {episode_number} (ID: {show_id})[/]."
+                )
+                exit()
+
+            url = url.replace("playlist.m3u8", flt[0])
+
+            response = session.get(url)
+
+            playlist_path = Path().joinpath(path.parent, f"{output}.m3u8")
+            with open(playlist_path, "w") as dest_file:
+                for i in response.text.split("\n"):
+                    if i.endswith(".ts"):
+                        i = url.replace(flt[0], i)
+
+                    dest_file.write(f"{i}\n")
+
+            if download:
+                mp4_path = Path().joinpath(path.parent, f"{output}.mp4").absolute()
+
+                sp_run(
+                    [
+                        ffmpeg_path,  # type: ignore
+                        "-protocol_whitelist",
+                        "https,file,tls,tcp",
+                        "-i",
+                        playlist_path,
+                        "-c",
+                        "copy",
+                        "-bsf:a",
+                        "aac_adtstoasc",
+                        str(mp4_path),
+                    ],
+                )
+
+                playlist_path.unlink(missing_ok=True)
             continue
 
         if not download:

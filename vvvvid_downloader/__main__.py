@@ -152,13 +152,11 @@ def main(download: bool) -> None:
 
             episodes = [i for index, i in enumerate(episodes, 1) if index in answer]
 
-    path = None
-
     for i in track(episodes, "Scarico..."):
         show_title = i["show_title"]
         episode_number = i["number"]
 
-        path = Path().joinpath("vvvvid", show_title, "temp")
+        path = Path().joinpath("vvvvid", show_title)
         path.mkdir(exist_ok=True, parents=True)
 
         url = ds(i[quality_code])
@@ -205,7 +203,7 @@ def main(download: bool) -> None:
 
             response = session.get(url)
 
-            playlist_path = Path().joinpath(path.parent, f"{output}.m3u8")
+            playlist_path = path.joinpath(f"{output}.m3u8")
             with open(playlist_path, "w") as dest_file:
                 for i in response.text.split("\n"):
                     if i.endswith(".ts"):
@@ -214,7 +212,7 @@ def main(download: bool) -> None:
                     dest_file.write(f"{i}\n")
 
             if download:
-                mp4_path = Path().joinpath(path.parent, f"{output}.mp4").absolute()
+                mp4_path = path.joinpath(f"{output}.mp4").absolute()
 
                 sp_run(
                     [
@@ -235,7 +233,7 @@ def main(download: bool) -> None:
             continue
 
         if not download:
-            playlist_path = Path().joinpath(path.parent, f"{output}.m3u8")
+            playlist_path = path.joinpath(f"{output}.m3u8")
 
             if playlist_path.exists():
                 log.warning(f"L'episodio {episode_number} è già stato scaricato.")
@@ -247,7 +245,7 @@ def main(download: bool) -> None:
 
             continue
 
-        mp4_path = Path().joinpath(path.parent, f"{output}.mp4").absolute()
+        mp4_path = path.joinpath(f"{output}.mp4").absolute()
 
         if mp4_path.exists():
             log.warning(f"L'episodio {episode_number} è già stato scaricato.")
@@ -265,9 +263,6 @@ def main(download: bool) -> None:
                 str(mp4_path),
             ],
         )
-
-    if path and path.exists():
-        rmtree(path)
 
     session.close()
     log.info("Download completato.")

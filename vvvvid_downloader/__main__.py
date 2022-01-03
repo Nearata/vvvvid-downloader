@@ -156,8 +156,6 @@ def main(download: bool) -> None:
             episodes = [i for index, i in enumerate(episodes, 1) if index in answer]
 
     for i in track(episodes, "Scarico..."):
-        print(i)
-        exit()
         show_title = i["show_title"]
         episode_number = i["number"]
 

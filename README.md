@@ -21,16 +21,16 @@ python -m vvvvid_downloader
 
 Seguire le istruzioni a schermo.
 
+## Opzioni
+
+- `--download`: Permette di scaricare e convertire i file in .mp4. (Richiede FFmpeg)
+
 ## Output
 
 Lo script creerà una cartella di nome `vvvvid`, con al suo interno una cartella con il nome del film che avete scaricato.
 
 - Se avete usato l'opzione `--download`, vi ritroverete i file convertiti nel formato `.mp4`.
 - In caso contrario, vi ritroverete un file `.m3u8` che potrete aprire con VLC o simili per eseguirne lo streaming.
-
-## Opzioni
-
-- `--download`: Permette di scaricare e convertire i file in .mp4. (Richiede FFmpeg)
 
 ## Come trovare l'ID di un anime
 

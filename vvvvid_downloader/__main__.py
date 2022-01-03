@@ -50,7 +50,8 @@ def main(download: bool) -> None:
 
     # Get info about the show by its ID
     response = session.get(
-        f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/info/?conn_id={conn_id}",
+        f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/info",
+        params={"conn_id": conn_id},
     )
     json = response.json()
 
@@ -67,7 +68,8 @@ def main(download: bool) -> None:
 
     # Get the seasons of the show (this could also contain dubbed versions)
     response = session.get(
-        f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/seasons/?conn_id={conn_id}",
+        f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/seasons",
+        params={"conn_id": conn_id},
     )
     json = response.json()
     data = json["data"]
@@ -93,7 +95,8 @@ def main(download: bool) -> None:
         season_id = i["season_id"]
         video_id = i["video_id"]
         response = session.get(
-            f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/season/{season_id}?video_id={video_id}&conn_id={conn_id}",
+            f"https://www.vvvvid.it/vvvvid/ondemand/{show_id}/season/{season_id}",
+            params={"conn_id": conn_id, "video_id": video_id},
         )
         json = response.json()
 
@@ -153,6 +156,8 @@ def main(download: bool) -> None:
             episodes = [i for index, i in enumerate(episodes, 1) if index in answer]
 
     for i in track(episodes, "Scarico..."):
+        print(i)
+        exit()
         show_title = i["show_title"]
         episode_number = i["number"]
 

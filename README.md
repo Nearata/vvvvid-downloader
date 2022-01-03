@@ -1,11 +1,11 @@
 # VVVVID Downloader
 
-> Uno script in Python per scaricare, in modo semplice, gli anime anime da VVVVID.
+> Uno script in Python per scaricare da VVVVID.
 
 ## Requisiti
 
 - [Python](https://python.org) 3.9+
-- [FFmpeg](https://ffmpeg.org/)
+- [FFmpeg](https://ffmpeg.org/) (Opzionale, solo se si vogliono scaricare e convertire i file in .mp4)
 
 ## Installazione
 
@@ -19,37 +19,26 @@ pip install vvvvid_downloader
 python -m vvvvid_downloader
 ```
 
-Segui le istruzioni a schermo. Per maggiori informazioni sui campi di configurazione, leggi la sezione [Configurazione](#Configurazione).
+Seguire le istruzioni a schermo.
+
+## Output
+
+Lo script creerà una cartella di nome `vvvvid`, con al suo interno una cartella con il nome del film che avete scaricato.
+
+- Se avete usato l'opzione `--download`, vi ritroverete i file convertiti nel formato `.mp4`.
+- In caso contrario vi ritroverete un file `.m3u8`, che potrete aprire con VLC o simili per eseguirne lo streaming.
+
+## Opzioni
+
+- `--download`: Permette di scaricare e convertire i file in .mp4. (Richiede FFmpeg)
 
 ## Come trovare l'ID di un anime
 
-Apri l'anime che vuoi scaricare da [VVVVID](https://www.vvvvid.it). Esempio:
-
-```sh
+```bash
 https://www.vvvvid.it/show/1353/deca-dence
 ```
 
-In questo caso, l'ID dell'anime è `1353`
-
-## Configurazione
-
-Al primo avvio dello script, vi verrà chiesto di completare due campi.
-
-1. Dove salvare gli anime.
-2. Il percorso che porta al file `ffmpeg`. (Se avete una variabile d'ambiente, inserite `ffmpeg`)
-
-Se vorrete modificare in futuro questi campi, eseguite:
-
-```bash
-python -m vvvvid_downloader --edit-config
-```
-
-## Contributing
-
-1. Fork it
-2. Commit your changes
-3. Push to the branch
-4. Create a new Pull Request
+L'ID è `1353`.
 
 ## Unlicense
 

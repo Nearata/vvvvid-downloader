@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from re import sub as re_sub
-from shutil import rmtree, which
+from shutil import which
 from subprocess import run as sp_run
 
 from click import command, option

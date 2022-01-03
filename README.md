@@ -26,7 +26,7 @@ Seguire le istruzioni a schermo.
 Lo script creerà una cartella di nome `vvvvid`, con al suo interno una cartella con il nome del film che avete scaricato.
 
 - Se avete usato l'opzione `--download`, vi ritroverete i file convertiti nel formato `.mp4`.
-- In caso contrario vi ritroverete un file `.m3u8`, che potrete aprire con VLC o simili per eseguirne lo streaming.
+- In caso contrario, vi ritroverete un file `.m3u8` che potrete aprire con VLC o simili per eseguirne lo streaming.
 
 ## Opzioni
 

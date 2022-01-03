@@ -239,9 +239,9 @@ def main(download: bool) -> None:
                 log.warning(f"L'episodio {episode_number} è già stato scaricato.")
                 continue
 
-            with open(playlist_path, "wb") as dest_file:
+            with open(playlist_path, "wb") as dest_file1:
                 for data in response.iter_bytes(32768):
-                    dest_file.write(data)
+                    dest_file1.write(data)
 
             continue
 

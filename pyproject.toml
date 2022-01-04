@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [tool.flit.metadata]
 module = "vvvvid_downloader"
 author = "Nearata"
-author-email = "williamdicicco@protonmail.com"
+author-email = "nearata@protonmail.com"
 home-page = "https://github.com/nearata/vvvvid-downloader"
 classifiers = [
     "License :: OSI Approved :: MIT License",
@@ -15,11 +15,11 @@ classifiers = [
 ]
 description-file = "README.md"
 requires = [
-    "inquirer ==2.7.0",
-    "httpx ==0.18.1",
-    "typer ==0.3.2",
-    "tqdm ==4.60.0",
-    "colorama ==0.4.4"
+    "inquirer ==2.9.1",
+    "httpx ==0.21.1",
+    "rich ==10.16.2",
+    "click ==8.0.3",
+    "h2 >=3,<5"
 ]
 requires-python = ">=3.9"
 

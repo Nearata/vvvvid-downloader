@@ -1,3 +1,3 @@
-""" Uno script in Python per scaricare, in modo semplice, gli anime anime da VVVVID. """
+""" Uno script in Python per scaricare da VVVVID. """
 
 __version__ = "1.3.0"

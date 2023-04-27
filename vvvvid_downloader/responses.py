@@ -376,6 +376,22 @@ class SeasonObject(BaseObject):
                 for data in r.iter_bytes(32768):
                     dest_file1.write(data)
 
+        if self.video_type == "video/dash":
+            playlist_path = output_dir.joinpath(f"{output_name}.m3u8")
+
+            flt: list[str] = list(
+                filter(lambda i: i.endswith(".m3u8"), r.text.split("\n"))
+            )
+
+            r = self.client.get(url)
+
+            with output_dir.joinpath(f"{output_name}.m3u8").open("w") as dest_file:
+                for s in r.text.split("\n"):
+                    if s.endswith(".m3u8"):
+                        s = url.replace(flt[0], s)
+
+                    dest_file.write(f"{s}\n")
+
         return DownloadResponse.HTTP_SUCCESS
 
 

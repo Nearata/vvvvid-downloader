@@ -13,7 +13,7 @@ from rich.prompt import IntPrompt, Prompt
 from vvvvid_downloader import __version__
 
 from .api import Api
-from .responses import DownloadResponse
+from .responses import DownloadResponse, SeasonObject
 
 logging.basicConfig(
     level="INFO",
@@ -98,6 +98,7 @@ def main(download: bool) -> None:
 
             season = [i for index, i in enumerate(season, 1) if index in answer]
 
+    i: SeasonObject
     for i in track(season, "Scarico..."):
         show_title = i.show_title
         episode_number = i.number

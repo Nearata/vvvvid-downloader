@@ -103,7 +103,7 @@ def main(download: bool) -> None:
         show_title = i.show_title
         episode_number = i.number
 
-        embed_code = getattr(season[0], quality_code, "")
+        embed_code = getattr(i, quality_code, "")
         output_dir = Path().joinpath("vvvvid", show_title)
         output_name = re_sub(r"\s", "_", f"{show_title}_Ep_{episode_number}_{quality}")
 
